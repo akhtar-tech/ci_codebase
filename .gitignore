@@ -1,5 +1,6 @@
 # Don't track content of these folders
 app/application/third_party/composer/vendor/
+system_3_1_9/
 data/
 .vscode/
 composer.lock
