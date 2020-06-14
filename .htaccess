@@ -1,0 +1,78 @@
+#------------------------------------------------------------------------------
+# This file provides server security limiting access to the localhost only.
+# Comment next four lines to deactivate. (Allows external access)
+#------------------------------------------------------------------------------
+
+Order Deny,Allow
+#Deny from all
+Allow from all
+Allow from 127.0.0.1
+Allow from ::1
+
+#------------------------------------------------------------------------------
+# To allow execution of cgi scripts in this directory uncomment next two lines.
+#------------------------------------------------------------------------------.
+
+AddHandler cgi-script .bat .exe .pl .cgi
+Options +ExecCGI +FollowSymLinks
+
+RewriteEngine On
+RewriteCond $1 !^(index\.php|assets|images|js|css|uploads|favicon.png)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^(.*)$ index.php/$1 [L]
+RewriteRule ^(.*)$ index.php?/$1 [QSA,L]
+
+
+
+# 3 Month
+<FilesMatch "\.(swf|ico|flv)$">
+  Header set Cache-Control "max-age=7257600"
+</FilesMatch>
+
+# 1 Week
+<FilesMatch "\.(js|css|pdf|txt)$">
+  Header set Cache-Control "max-age=604800"
+</FilesMatch>
+
+# 1 Days
+<FilesMatch "\.(gif|jpg|jpeg|png)$">
+  Header set Cache-Control "max-age=86400"
+</FilesMatch>
+
+# 10 Minutes
+<FilesMatch "\.(html|htm)$">
+  Header set Cache-Control "max-age=600"
+</FilesMatch>
+
+# 20 Seconds
+#<FilesMatch "\.()$">
+#  Header set Cache-Control "max-age=20"
+#</FilesMatch>
+
+# NONE
+<FilesMatch "\.(pl|cgi|spl|php)$">
+  Header unset Cache-Control
+  Header unset Expires
+  Header unset Last-Modified
+  FileETag None
+  Header unset Pragma
+</FilesMatch>
+
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php7_module>
+   php_flag display_errors Off
+   php_value max_execution_time 90
+   php_value max_input_time 60
+   php_value max_input_vars 1000
+   php_value memory_limit 64M
+   php_value post_max_size 20M
+   php_value session.gc_maxlifetime 1440
+   php_value session.save_path "/var/cpanel/php/sessions/ea-php70"
+   php_value upload_max_filesize 20M
+   php_flag zlib.output_compression Off
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
